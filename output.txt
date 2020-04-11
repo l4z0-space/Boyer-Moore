@@ -1,0 +1,19 @@
+
+Bayer-Moore Algorithm illustration
+
+	Text: jlklkj
+	Pattern: j
+
+> Search finished...
+
+- - - - - - - 
+Pattern 'j' occurs 2 time(s) in the text.
+Position(s): 0 5 
+
+
+> Matching Position(s) below...
+
+		jlklkj
+		j
+		     j
+- - - - - - - 
