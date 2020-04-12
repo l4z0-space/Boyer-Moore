@@ -75,15 +75,16 @@ int main(){
     freopen("output.txt","w",stdout);
     string text,pattern;
     do{
-        cerr << "Enter the text: ";       getline(cin,text);
-        cerr << "Enter the pattern: ";    getline(cin,pattern);
+        cerr << "\n > Enter the text: ";       getline(cin,text);
+        cerr << "\n > Enter the pattern: ";    getline(cin,pattern);
 
         if(text.length() < pattern.length())
             cerr << "\nPattern length is greater than text...\n\n";
 
     }while( text.length() < pattern.length() );
 
-    cout << "\nBoyer-Moore Algorithm illustration\n\n";
+    cout << "\n -> Boyer-Moore Algorithm illustration <-\n\n";
+    cout << "******* Program starts here *******\n\n";
     cout << "\tText: " << text << "\n";
     cout << "\tPattern: " << pattern << "\n\n";
     // call Bayer-Moore Algorithm
@@ -105,8 +106,10 @@ int main(){
 
         cout << "\n\n\n> Matching Position(s) below...";
         cout << "\n\n\t\t" << text << "\n";
+
+        int it = 1;
         for( int x : matches ){
-            cout << "\t\t" << spaces(x) << pattern << "\n";
+            cout<<"\t\t" << spaces(x) << pattern << "\n";
         }
         for( int i=0 ; i <=(int)text.length(); i++ ) cout << "- " ; cout << endl;
     }
@@ -114,14 +117,14 @@ int main(){
 
 
     string choice;
-    cerr << "Show all steps (Y/N) >";
+    cerr << "\n > Show all steps (Y/N): ";
     bool showSteps=0;
     while(true){
 
         cin >> choice;
         if( choice == "Y" ){ showSteps=1; break;}
         if( choice == "N" )break;
-        else cerr << "Enter Y or N > ";
+        else cerr << "\nEnter Y or N > ";
     }
 
     if( choice == "Y" ){
@@ -129,7 +132,8 @@ int main(){
         for( string step : steps ){
             cout << "\n\n" << step;
         }
-        cerr << "Steps successfully added in the end of the output file!\n";
+        cout << "\n\n ******* End of steps *******\n\n";
+        cerr << "\n * Steps successfully added in the end of the output file! *\n";
     }
     return 0;
 }

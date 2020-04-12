@@ -1,19 +1,75 @@
 
-Bayer-Moore Algorithm illustration
+ -> Boyer-Moore Algorithm illustration <-
 
-	Text: jlklkj
-	Pattern: j
+******* Program starts here *******
+
+	Text: alalalafalaaallalongla
+	Pattern: lal
 
 > Search finished...
 
-- - - - - - - 
-Pattern 'j' occurs 2 time(s) in the text.
-Position(s): 0 5 
+- - - - - - - - - - - - - - - - - - - - - - - 
+Pattern 'lal' occurs 3 time(s) in the text.
+Position(s): 1 3 14 
 
 
 > Matching Position(s) below...
 
-		jlklkj
-		j
-		     j
-- - - - - - - 
+		alalalafalaaallalongla
+		 lal
+		   lal
+		              lal
+- - - - - - - - - - - - - - - - - - - - - - - 
+
+Steps below...
+
+ > Shift to index 1
+alalalafalaaallalongla
+ lal
+
+		 > Match at index 1
+		alalalafalaaallalongla
+		 lal
+
+		 > Match at index 3
+		alalalafalaaallalongla
+		   lal
+
+ > Shift to index 8
+alalalafalaaallalongla
+        lal
+
+ > Shift to index 9
+alalalafalaaallalongla
+         lal
+
+ > Shift to index 10
+alalalafalaaallalongla
+          lal
+
+ > Shift to index 11
+alalalafalaaallalongla
+           lal
+
+ > Shift to index 12
+alalalafalaaallalongla
+            lal
+
+ > Shift to index 13
+alalalafalaaallalongla
+             lal
+
+ > Shift to index 14
+alalalafalaaallalongla
+              lal
+
+		 > Match at index 14
+		alalalafalaaallalongla
+		              lal
+
+ > Shift to index 20
+alalalafalaaallalongla
+                    lal
+
+ ******* End of steps *******
+
