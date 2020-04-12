@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
                         // Boyer-Moore Algorithm
@@ -30,110 +31,95 @@ void searchBM(string text, string pattern){
     int n = text.length();
     int m = pattern.length();
 
-
     badCharH(pattern);
+    int shift = 0, remain = n - m;
 
-    int shift = 0, remain = n-m;
+    while( shift <= remain ){
 
-    while(shift<=remain){
+        int j = m - 1;
 
-        int j = m-1;
+        while( j >= 0 && pattern[j] == text[ shift + j ]) j--;
 
-        while( j>=0 && pattern[j] == text[shift+j]) j--;
+        string currStep = "";
 
         if(j<0){
-            string currStep="";
-          //  cout << "\n\n";
-            currStep += "\t\t > Match at index "+to_string(shift)+"\n";
-            currStep += "\t\t"+text+"\n\t\t" + spaces(shift) + pattern;
-           // cout << currStep << "\n";
+            currStep += "\t\t > Match at index " + to_string(shift) + "\n";
+            currStep += "\t\t" + text + "\n\t\t" + spaces(shift) + pattern;
 
-            // add the match and step
-            matches.push_back(shift);
-            steps.push_back(currStep);
-            // check if arrived in the end of text
+            matches.push_back(shift);  // add the match and step
+            steps.push_back(currStep); // check if arrived in the end of text
+
             if( shift + m < n ) shift += m - badChar[ text [ shift + m ] ];
             else shift++;
         }
 
         else{
-            string currStep="";
             shift += max(1, j - badChar[ text [ shift + j ] ]);
-            //cout<<"\n\n";
-            currStep += " > Shift to index "+to_string(shift)+"\n"+ text+"\n"+spaces(shift)+pattern;
-            //cout<<currStep;
+            currStep += " > Shift to index " + to_string(shift) + "\n" + text + "\n" + spaces(shift) + pattern;
             steps.push_back(currStep);
         }
     }
-    cout<<"> Search finished...\n\n";
-
 }
 
 
 int main(){
     //freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
+    //freopen("output.txt","w",stdout);
     string text,pattern;
     do{
-        cerr << "\n > Enter the text: ";       getline(cin,text);
-        cerr << "\n > Enter the pattern: ";    getline(cin,pattern);
+        cout << "\n > Enter the text: ";       getline(cin,text);
+        cout << "\n > Enter the pattern: ";    getline(cin,pattern);
 
         if(text.length() < pattern.length())
             cerr << "\nPattern length is greater than text...\n\n";
 
     }while( text.length() < pattern.length() );
 
-    cout << "\n -> Boyer-Moore Algorithm illustration <-\n\n";
-    cout << "******* Program starts here *******\n\n";
-    cout << "\tText: " << text << "\n";
-    cout << "\tPattern: " << pattern << "\n\n";
+    ofstream toFile("illustrator.txt");
+
+    toFile << "\n -> Boyer-Moore Algorithm illustration <-\n\n";
+    toFile << "******* Program starts here *******\n\n";
+    toFile << "\tText: " << text << "\n";
+    toFile << "\tPattern: " << pattern << "\n\n";
     // call Bayer-Moore Algorithm
     searchBM(text,pattern);
 
     int totalMatches = (int)matches.size();
 
     if( totalMatches == 0 )
-        cout << "No matches for the pattern \'" << pattern << "\'\n";
+        toFile << "\n\n No matches for the pattern \'" << pattern << "\'\n";
 
     else{
 
-        for(int i=0;i<=(int)text.length();i++) cout << "- "; cout << endl;
+        for(int i=0;i<=(int)text.length();i++) toFile << "- "; toFile << endl;
 
-        cout << "Pattern \'" << pattern << "\' occurs " << totalMatches << " time(s) in the text.\n";
-        cout << "Position(s): ";
+        toFile << "Pattern \'" << pattern << "\' occurs " << totalMatches << " time(s) in the text.\n";
+        toFile << "Position(s): ";
 
-        for( int x : matches )cout << x << " ";
+        for( int x : matches )toFile << x << " ";
 
-        cout << "\n\n\n> Matching Position(s) below...";
-        cout << "\n\n\t\t" << text << "\n";
+        toFile << "\n\n\n> Matching Position(s) below...";
+        toFile << "\n\n\t\t" << text << "\n";
 
         int it = 1;
         for( int x : matches ){
-            cout<<"\t\t" << spaces(x) << pattern << "\n";
+            toFile<<"\t\t" << spaces(x) << pattern << "\n";
         }
-        for( int i=0 ; i <=(int)text.length(); i++ ) cout << "- " ; cout << endl;
+        for( int i=0 ; i <=(int)text.length(); i++ ) toFile << "- " ; toFile << "\n";
     }
 
+    toFile.close();
 
+    ofstream toSteps("steps.txt"); // store here the steps
 
-    string choice;
-    cerr << "\n > Show all steps (Y/N): ";
-    bool showSteps=0;
-    while(true){
-
-        cin >> choice;
-        if( choice == "Y" ){ showSteps=1; break;}
-        if( choice == "N" )break;
-        else cerr << "\nEnter Y or N > ";
+    toSteps << "\nSteps below\n\t ...";
+    for( string step : steps ){
+        toSteps << "\n\n" << step;
     }
+    toSteps << "\n\n ******* End of steps *******\n\n";
 
-    if( choice == "Y" ){
-        cout<<"\nSteps below...";
-        for( string step : steps ){
-            cout << "\n\n" << step;
-        }
-        cout << "\n\n ******* End of steps *******\n\n";
-        cerr << "\n * Steps successfully added in the end of the output file! *\n";
-    }
+    cout << "\n * Files \'steps.txt\' and \'illustrator.txt\' created! *\n";
+
+    toSteps.close();
     return 0;
 }
