@@ -3,18 +3,9 @@
 
 ******* Program starts here *******
 
-	Text: laldlaladcalalwaala
-	Pattern: lal
-
-- - - - - - - - - - - - - - - - - - - - 
-Pattern 'lal' occurs 3 time(s) in the text.
-Position(s): 0 4 11 
+	Text: alibdasgf
+	Pattern: bbbf
 
 
-> Matching Position(s) below...
 
-		laldlaladcalalwaala
-		lal
-		    lal
-		           lal
-- - - - - - - - - - - - - - - - - - - - 
+ No matches for the pattern 'bbbf'

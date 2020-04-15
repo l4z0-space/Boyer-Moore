@@ -1,38 +1,22 @@
 
+
+ + Last position table...
+						|	b	|	f	|	
+						|	2	|	3	|	
 Steps below
 	 ...
 
-		 > Match at index 0
-		laldlaladcalalwaala
-		lal
+ > Shift to index 1
+alibdasgf
+ bbbf
 
-		 > Match at index 4
-		laldlaladcalalwaala
-		    lal
+ > Shift to index 5
+alibdasgf
+     bbbf
 
- > Shift to index 9
-laldlaladcalalwaala
-         lal
-
- > Shift to index 10
-laldlaladcalalwaala
-          lal
-
- > Shift to index 11
-laldlaladcalalwaala
-           lal
-
-		 > Match at index 11
-		laldlaladcalalwaala
-		           lal
-
- > Shift to index 16
-laldlaladcalalwaala
-                lal
-
- > Shift to index 17
-laldlaladcalalwaala
-                 lal
+ > Shift to index 8
+alibdasgf
+        bbbf
 
  ******* End of steps *******
 

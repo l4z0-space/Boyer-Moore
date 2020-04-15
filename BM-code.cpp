@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <string>
+#include <unordered_map>
 #include <fstream>
 using namespace std;
 
@@ -8,21 +10,21 @@ using namespace std;
 
 vector<int>matches;  // Store the matching positions here.
 vector<string>steps; // Store all the steps here.
-int badChar[256];
+unordered_map<char,int> lastPos;
 
-void badCharH(string word){
-    int sz = (int)word.length();
-
-    for(int i=0;i<256;i++) // all possible chars
-        badChar[i]=-1;
-
-    for(int i=0;i<sz;i++)
-        badChar[(int)word[i]]=i;
+void prepTable(string pattern, string text){
+    int it = 0;
+    // Store last position of every character.
+    for( char ch : text )
+        lastPos[ch] = -1;
+    for( char ch : pattern )
+        lastPos[ch] = it++;
 }
 
+// Just a function to help in formating.
 string spaces(int n){
-    string toReturn="";
-    while(n--)toReturn+=" ";
+    string toReturn = "";
+    while(n--)toReturn += " ";
     return toReturn;
 }
 
@@ -31,30 +33,35 @@ void searchBM(string text, string pattern){
     int n = text.length();
     int m = pattern.length();
 
-    badCharH(pattern);
+    prepTable(pattern,text); // Prepare the table which helps shifting.
     int shift = 0, remain = n - m;
 
     while( shift <= remain ){
 
-        int j = m - 1;
+        int check = m - 1;
 
-        while( j >= 0 && pattern[j] == text[ shift + j ]) j--;
+        while( check >= 0 && pattern[check] == text[ shift + check ]) check--; // Decrement [check] until a mismatch.
 
         string currStep = "";
 
-        if(j<0){
-            currStep += "\t\t > Match at index " + to_string(shift) + "\n";
+        if(check<0){  // If check < 0 then we have a match.
+
+            // Below lines for formating...
+            currStep += "\t\t + Match at index " + to_string(shift) + "\n";
             currStep += "\t\t" + text + "\n\t\t" + spaces(shift) + pattern;
 
-            matches.push_back(shift);  // add the match and step
-            steps.push_back(currStep); // check if arrived in the end of text
+            // Add the match and step.
+            matches.push_back(shift);
+            steps.push_back(currStep);
 
-            if( shift + m < n ) shift += m - badChar[ text [ shift + m ] ];
+            if( shift + m < n ) shift += m - lastPos[ text [ shift + m ] ]; // Shift by [m] - the value in [lastPos] table of mismatched char.
             else shift++;
         }
 
         else{
-            shift += max(1, j - badChar[ text [ shift + j ] ]);
+
+            shift += max(1, check - lastPos[ text [ shift + check ] ]);
+            // Below lines used for formating...
             currStep += " > Shift to index " + to_string(shift) + "\n" + text + "\n" + spaces(shift) + pattern;
             steps.push_back(currStep);
         }
@@ -112,6 +119,29 @@ int main(){
 
     ofstream toSteps("steps.txt"); // store here the steps
 
+
+
+    // Prints the lastPos table [124-142]
+
+    string toShow="";
+    unordered_map<char,bool>usedChar;
+
+    for( char ch : pattern){
+        if( !usedChar[ch] )
+            usedChar[ch] = 1,
+            toShow += ch;
+    }
+
+    sort(toShow.begin(),toShow.end());
+    toSteps << "\n\n + Last position table...\n\t\t\t\t\t\t|\t";
+    for( char ch : toShow )
+        toSteps << ch << "\t|\t";
+    toSteps << "\n\t\t\t\t\t\t|\t";
+    for( char ch : toShow )
+        toSteps << lastPos[ch] << "\t|\t";
+
+
+
     toSteps << "\nSteps below\n\t ...";
     for( string step : steps ){
         toSteps << "\n\n" << step;
@@ -119,7 +149,7 @@ int main(){
     toSteps << "\n\n ******* End of steps *******\n\n";
 
     cout << "\n * Files \'steps.txt\' and \'illustrator.txt\' created! *\n";
-
     toSteps.close();
+
     return 0;
 }
